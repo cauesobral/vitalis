@@ -3,6 +3,9 @@ package com.cauesobral.vitalis.model;
 import jakarta.persistence.MappedSuperclass;
 import java.time.LocalDate;
 
+//superclasse de doctor, patient e companion
+//escolhi usar superclasse person porque no futuro facilita escalabilidade
+// se for adicionado mais uma classe de pessoa (funcionario, dentista, por exemplo)
 @MappedSuperclass
 public class Person {
     private String fullName;

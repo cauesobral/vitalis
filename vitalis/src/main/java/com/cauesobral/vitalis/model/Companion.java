@@ -1,7 +1,7 @@
 package com.cauesobral.vitalis.model;
 
 import java.time.LocalDate;
-
+//acompanhante do paciente, classe filha de person
 public class Companion extends Person {
 
     private String kinshipDegree; // Grau de parentesco com o paciente

@@ -18,7 +18,7 @@ public class DoctorService {
         this.doctorRepository = doctorRepository;
     }
 
-    // CREATE
+    // criar medico
     public DoctorResponseDTO create(DoctorRequestDTO dto) {
 
         if (doctorRepository.existsByCrm(dto.getCrm())) {
@@ -51,7 +51,7 @@ public class DoctorService {
         return toResponse(doctor);
     }
 
-    // FIND ALL
+    // encontrar todos os medicos
     public List<DoctorResponseDTO> findAll() {
         return doctorRepository.findAll()
                 .stream()
@@ -59,7 +59,7 @@ public class DoctorService {
                 .toList();
     }
 
-    // FIND BY ID
+    // encontrar medico por id
     public DoctorResponseDTO findById(Long id) {
 
         Doctor doctor = doctorRepository.findById(id)
@@ -68,7 +68,7 @@ public class DoctorService {
         return toResponse(doctor);
     }
 
-    // FIND BY CRM
+    // encontrar medico por crm
     public DoctorResponseDTO findByCrm(String crm) {
 
         Doctor doctor = doctorRepository.findByCrm(crm)
@@ -77,7 +77,7 @@ public class DoctorService {
         return toResponse(doctor);
     }
 
-    // UPDATE
+    // alterar info medico
     public DoctorResponseDTO update(Long id, DoctorRequestDTO dto) {
 
         Doctor doctor = doctorRepository.findById(id)
@@ -104,7 +104,7 @@ public class DoctorService {
         return toResponse(doctor);
     }
 
-    // DELETE
+    // deletar o medico pelo id
     public void delete(Long id) {
 
         if (!doctorRepository.existsById(id)) {
@@ -114,7 +114,8 @@ public class DoctorService {
         doctorRepository.deleteById(id);
     }
 
-    // MAPPER
+    // mapper que converte uma entidade Doctor em um DoctorResponseDTO,
+    // separando o modelo interno do banco do formato exposto pela API
     private DoctorResponseDTO toResponse(Doctor doctor) {
 
         DoctorResponseDTO dto = new DoctorResponseDTO();

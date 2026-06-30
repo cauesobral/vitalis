@@ -3,6 +3,7 @@ package com.cauesobral.vitalis.model;
 import jakarta.persistence.*;
 import java.util.Objects;
 
+//Entidade triagem - tem os dados da triagem nela
 @Entity
 @Table(name = "triages")
 public class Triage {

@@ -32,20 +32,20 @@ class TriageServiceTest {
 
     @Test
     void shouldCreateEmergencyTriage() {
-
-        // 🔧 mock da regra de prioridade
+    //comentar que eh should pq significa "deveria" em ingles
+        // mock da regra de prioridade
         when(priorityCalculatorService.calculate(any(Triage.class)))
                 .thenReturn(Priority.RED);
 
-        // 🔧 mock do save do repository
+        // mock do save do repository
         Triage saved = new Triage();
         when(triageRepository.save(any(Triage.class)))
                 .thenReturn(saved);
 
-        // 🚀 chamada do método real
+        // chamada do método real
         var result = triageService.createEmergency();
 
-        // ✅ validações mínimas
+        // validações mínimas
         assertNotNull(result);
     }
     @Test

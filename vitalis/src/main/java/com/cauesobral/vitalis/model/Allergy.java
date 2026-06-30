@@ -4,7 +4,7 @@ import jakarta.persistence.Embeddable;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import java.util.Objects;
-
+//entidade das possiveis alergia dos pacientes
 @Embeddable
 public class Allergy {
 

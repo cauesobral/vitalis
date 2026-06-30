@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 
+//aqui no service eh onde vai ser aplicada a regra de negocio
 @Service
 public class AppointmentService {
 
@@ -32,7 +33,7 @@ public class AppointmentService {
 
     public AppointmentResponseDTO schedule(AppointmentRequestDTO dto) {
         AppointmentValidation.validate(dto);
-
+        //lança BusinessError se o paciente e o doutor nao forem encontrados (o id deles)
         Patient patient = patientRepository.findById(dto.getPatientId())
                 .orElseThrow(() -> new BusinessException("Paciente não encontrado com id: " + dto.getPatientId()));
 
@@ -43,8 +44,9 @@ public class AppointmentService {
         appointment.setPatient(patient);
         appointment.setDoctor(doctor);
         appointment.setScheduledAt(dto.getScheduledAt());
+        //Muda o status do appointment de null para scheduled
         appointment.setStatus(AppointmentStatus.SCHEDULED);
-
+        //salva o appointment
         Appointment saved = appointmentRepository.save(appointment);
         return AppointmentResponseDTO.fromAppointment(saved);
     }

@@ -8,7 +8,6 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.web.SecurityFilterChain;
 
 //mínimo de segurança: libera todos os endpoints para testes
-//implementar autenticação (JWT ou OAuth2) antes de ir para produção
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
@@ -20,6 +19,8 @@ public class SecurityConfig {
             .csrf(AbstractHttpConfigurer::disable)
             // Permite todas as requisições sem autenticação
             .authorizeHttpRequests(auth -> auth.anyRequest().permitAll());
+
+        //implementar autenticação (JWT ou OAuth2) antes de ir para produção
 
         return http.build();
     }

@@ -11,7 +11,7 @@ public class Patient extends Person {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    // características do paciente
     private String bloodType;
     private double height;
     private double weight;
