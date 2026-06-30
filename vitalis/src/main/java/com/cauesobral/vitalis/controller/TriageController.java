@@ -24,7 +24,7 @@ public class TriageController {
             @RequestBody TriageRequestDTO dto) {
 
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(triageService.createEmergency(dto));
+                .body(triageService.createEmergency());
     }
 
     @PostMapping("/appointment/{appointmentId}")
