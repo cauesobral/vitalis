@@ -27,11 +27,9 @@ public class TriageService {
         this.priorityCalculatorService = priorityCalculatorService;
     }
 
-    public TriageResponseDTO createEmergency(TriageRequestDTO dto) {
+    public TriageResponseDTO createEmergency() {
 
         Triage triage = new Triage();
-
-        fillFields(triage, dto);
 
         triage.setPriority(priorityCalculatorService.calculate(triage));
 

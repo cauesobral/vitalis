@@ -64,4 +64,9 @@ public class TriageController {
     public ResponseEntity<List<TriageResponseDTO>> getQueue() {
         return ResponseEntity.ok(triageService.getQueue());
     }
+    @PostMapping("/emergency")
+    public ResponseEntity<TriageResponseDTO> createEmergency() {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(triageService.createEmergency());
+    }
 }

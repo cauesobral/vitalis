@@ -92,4 +92,5 @@ public class Triage {
     public int hashCode() {
         return Objects.hash(id);
     }
+
 }
