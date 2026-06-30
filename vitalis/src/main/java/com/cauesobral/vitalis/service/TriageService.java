@@ -3,7 +3,8 @@ package com.cauesobral.vitalis.service;
 import com.cauesobral.vitalis.dto.TriageRequestDTO;
 import com.cauesobral.vitalis.dto.TriageResponseDTO;
 import com.cauesobral.vitalis.exception.BusinessException;
-import com.cauesobral.vitalis.model.Triage;
+import com.cauesobral.vitalis.model.*;
+import com.cauesobral.vitalis.repository.AppointmentRepository;
 import com.cauesobral.vitalis.repository.TriageRepository;
 import org.springframework.stereotype.Service;
 
@@ -13,59 +14,59 @@ import java.util.List;
 public class TriageService {
 
     private final TriageRepository triageRepository;
+    private final AppointmentRepository appointmentRepository;
+    private final PriorityCalculatorService priorityCalculatorService;
 
-    public TriageService(TriageRepository triageRepository) {
+    public TriageService(TriageRepository triageRepository,
+                         AppointmentRepository appointmentRepository,
+                         PriorityCalculatorService priorityCalculatorService) {
         this.triageRepository = triageRepository;
+        this.appointmentRepository = appointmentRepository;
+        this.priorityCalculatorService = priorityCalculatorService;
     }
 
-    public TriageResponseDTO create(TriageRequestDTO dto) {
+    public TriageResponseDTO createEmergency() {
 
         Triage triage = new Triage();
+        triage.setStatus(TriageStatus.NOT_STARTED);
 
-        mapDtoToEntity(dto, triage);
-
-        triage = triageRepository.save(triage);
-
-        return toResponse(triage);
+        return toResponse(triageRepository.save(triage));
     }
 
-    public List<TriageResponseDTO> findAll() {
-        return triageRepository.findAll()
-                .stream()
-                .map(this::toResponse)
-                .toList();
+    public TriageResponseDTO createFromAppointment(Long appointmentId) {
+
+        Appointment appointment = appointmentRepository.findById(appointmentId)
+                .orElseThrow(() -> new BusinessException("Appointment não encontrado"));
+
+        Triage triage = new Triage();
+        triage.setAppointment(appointment);
+        triage.setStatus(TriageStatus.NOT_STARTED);
+
+        return toResponse(triageRepository.save(triage));
     }
 
-    public TriageResponseDTO findById(Long id) {
+    public TriageResponseDTO startTriage(Long id) {
 
         Triage triage = triageRepository.findById(id)
-                .orElseThrow(() -> new BusinessException("Triagem não encontrada."));
+                .orElseThrow(() -> new BusinessException("Triagem não encontrada"));
 
-        return toResponse(triage);
-    }
-
-    public TriageResponseDTO update(Long id, TriageRequestDTO dto) {
-
-        Triage triage = triageRepository.findById(id)
-                .orElseThrow(() -> new BusinessException("Triagem não encontrada."));
-
-        mapDtoToEntity(dto, triage);
-
-        triage = triageRepository.save(triage);
-
-        return toResponse(triage);
-    }
-
-    public void delete(Long id) {
-
-        if (!triageRepository.existsById(id)) {
-            throw new BusinessException("Triagem não encontrada.");
+        if (triage.getStatus() != TriageStatus.NOT_STARTED) {
+            throw new BusinessException("Triagem já foi iniciada ou finalizada");
         }
 
-        triageRepository.deleteById(id);
+        triage.setStatus(TriageStatus.IN_PROGRESS);
+
+        return toResponse(triageRepository.save(triage));
     }
 
-    private void mapDtoToEntity(TriageRequestDTO dto, Triage triage) {
+    public TriageResponseDTO finishTriage(Long id, TriageRequestDTO dto) {
+
+        Triage triage = triageRepository.findById(id)
+                .orElseThrow(() -> new BusinessException("Triagem não encontrada"));
+
+        if (triage.getStatus() != TriageStatus.IN_PROGRESS) {
+            throw new BusinessException("Triagem precisa estar em andamento");
+        }
 
         triage.setSymptoms(dto.getSymptoms());
         triage.setHeartRate(dto.getHeartRate());
@@ -77,8 +78,39 @@ public class TriageService {
         triage.setHeight(dto.getHeight());
         triage.setNotes(dto.getNotes());
 
-        // prioridade pode ser calculada depois
-        triage.setPriority(dto.getPriority());
+        triage.setPriority(priorityCalculatorService.calculate(triage));
+        triage.setStatus(TriageStatus.FINISHED);
+
+        return toResponse(triageRepository.save(triage));
+    }
+
+    public List<TriageResponseDTO> findAll() {
+        return triageRepository.findAll()
+                .stream()
+                .map(this::toResponse)
+                .toList();
+    }
+
+    public TriageResponseDTO findById(Long id) {
+        return toResponse(triageRepository.findById(id)
+                .orElseThrow(() -> new BusinessException("Triagem não encontrada")));
+    }
+
+    public void delete(Long id) {
+
+        if (!triageRepository.existsById(id)) {
+            throw new BusinessException("Triagem não encontrada");
+        }
+
+        triageRepository.deleteById(id);
+    }
+    public List<TriageResponseDTO> getQueue() {
+
+        return triageRepository
+                .findByStatusOrderByPriorityDescIdAsc(TriageStatus.FINISHED)
+                .stream()
+                .map(this::toResponse)
+                .toList();
     }
 
     private TriageResponseDTO toResponse(Triage triage) {
@@ -86,11 +118,6 @@ public class TriageService {
         TriageResponseDTO dto = new TriageResponseDTO();
 
         dto.setId(triage.getId());
-
-        if (triage.getAppointment() != null) {
-            dto.setAppointmentId(triage.getAppointment().getId());
-        }
-
         dto.setSymptoms(triage.getSymptoms());
         dto.setHeartRate(triage.getHeartRate());
         dto.setTemperature(triage.getTemperature());
@@ -99,8 +126,9 @@ public class TriageService {
         dto.setOxygenSaturation(triage.getOxygenSaturation());
         dto.setWeight(triage.getWeight());
         dto.setHeight(triage.getHeight());
-        dto.setPriority(triage.getPriority());
         dto.setNotes(triage.getNotes());
+        dto.setPriority(triage.getPriority());
+        dto.setStatus(triage.getStatus());
 
         return dto;
     }

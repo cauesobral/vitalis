@@ -12,7 +12,7 @@ public class Triage {
     private Long id;
 
     @OneToOne
-    @JoinColumn(name = "appointment_id")
+    @JoinColumn(name = "appointment_id", nullable = true)
     private Appointment appointment;
 
     private String symptoms;
@@ -26,11 +26,24 @@ public class Triage {
     private Double height;
 
     @Enumerated(EnumType.STRING)
-    private Priority priority;
+    private Priority priority = Priority.BLUE; //comeca no nivel 0
+
+    @Enumerated(EnumType.STRING)
+    private TriageStatus status;
 
     private String notes;
 
-    public Triage() {}
+    public Triage() {
+        this.status = TriageStatus.NOT_STARTED;
+    }
+
+    public TriageStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(TriageStatus status) {
+        this.status = status;
+    }
 
     public Long getId() { return id; }
 

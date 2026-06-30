@@ -3,8 +3,6 @@ package com.cauesobral.vitalis.controller;
 import com.cauesobral.vitalis.dto.TriageRequestDTO;
 import com.cauesobral.vitalis.dto.TriageResponseDTO;
 import com.cauesobral.vitalis.service.TriageService;
-import jakarta.validation.Valid;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,10 +18,31 @@ public class TriageController {
         this.triageService = triageService;
     }
 
-    @PostMapping
-    public ResponseEntity<TriageResponseDTO> create(@Valid @RequestBody TriageRequestDTO dto) {
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(triageService.create(dto));
+    @PostMapping("/emergency")
+    public ResponseEntity<TriageResponseDTO> createEmergency() {
+        return ResponseEntity.ok(triageService.createEmergency());
+    }
+
+    @PostMapping("/appointment/{appointmentId}")
+    public ResponseEntity<TriageResponseDTO> createFromAppointment(@PathVariable Long appointmentId) {
+        return ResponseEntity.ok(triageService.createFromAppointment(appointmentId));
+    }
+
+    @PostMapping("/{id}/start")
+    public ResponseEntity<TriageResponseDTO> start(@PathVariable Long id) {
+        return ResponseEntity.ok(triageService.startTriage(id));
+    }
+    @GetMapping("/queue")
+    public ResponseEntity<List<TriageResponseDTO>> queue() {
+        return ResponseEntity.ok(triageService.getQueue());
+    }
+
+    @PostMapping("/{id}/finish")
+    public ResponseEntity<TriageResponseDTO> finish(
+            @PathVariable Long id,
+            @RequestBody TriageRequestDTO dto) {
+
+        return ResponseEntity.ok(triageService.finishTriage(id, dto));
     }
 
     @GetMapping
@@ -34,14 +53,6 @@ public class TriageController {
     @GetMapping("/{id}")
     public ResponseEntity<TriageResponseDTO> findById(@PathVariable Long id) {
         return ResponseEntity.ok(triageService.findById(id));
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<TriageResponseDTO> update(
-            @PathVariable Long id,
-            @Valid @RequestBody TriageRequestDTO dto) {
-
-        return ResponseEntity.ok(triageService.update(id, dto));
     }
 
     @DeleteMapping("/{id}")

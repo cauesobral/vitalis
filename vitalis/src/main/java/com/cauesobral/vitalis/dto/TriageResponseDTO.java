@@ -1,6 +1,7 @@
 package com.cauesobral.vitalis.dto;
 
 import com.cauesobral.vitalis.model.Priority;
+import com.cauesobral.vitalis.model.TriageStatus;
 
 public class TriageResponseDTO {
 
@@ -29,6 +30,16 @@ public class TriageResponseDTO {
 
     public String getSymptoms() { return symptoms; }
     public void setSymptoms(String symptoms) { this.symptoms = symptoms; }
+
+    private TriageStatus status;
+
+    public TriageStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(TriageStatus status) {
+        this.status = status;
+    }
 
     public Integer getHeartRate() { return heartRate; }
     public void setHeartRate(Integer heartRate) { this.heartRate = heartRate; }
