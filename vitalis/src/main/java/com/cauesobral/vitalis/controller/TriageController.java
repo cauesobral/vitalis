@@ -19,14 +19,6 @@ public class TriageController {
         this.triageService = triageService;
     }
 
-    @PostMapping("/emergency")
-    public ResponseEntity<TriageResponseDTO> createEmergency(
-            @RequestBody TriageRequestDTO dto) {
-
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(triageService.createEmergency());
-    }
-
     @PostMapping("/appointment/{appointmentId}")
     public ResponseEntity<TriageResponseDTO> createFromAppointment(
             @PathVariable Long appointmentId,
