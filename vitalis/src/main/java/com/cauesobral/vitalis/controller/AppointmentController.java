@@ -19,37 +19,49 @@ public class AppointmentController {
     }
 
     @PostMapping
-    public ResponseEntity<AppointmentResponseDTO> schedule(@Valid @RequestBody AppointmentRequestDTO dto) {
+    public ResponseEntity<AppointmentResponseDTO> schedule(
+            @Valid @RequestBody AppointmentRequestDTO dto) {
+
         AppointmentResponseDTO response = appointmentService.schedule(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @PatchMapping("/{id}/arrive")
-    public ResponseEntity<AppointmentResponseDTO> arrive(@PathVariable Long id) {
+    public ResponseEntity<AppointmentResponseDTO> arrive(
+            @PathVariable("id") Long id) {
+
         AppointmentResponseDTO response = appointmentService.arrive(id);
         return ResponseEntity.ok(response);
     }
 
     @PatchMapping("/{id}/triage")
-    public ResponseEntity<AppointmentResponseDTO> advanceToTriaged(@PathVariable Long id) {
+    public ResponseEntity<AppointmentResponseDTO> advanceToTriaged(
+            @PathVariable("id") Long id) {
+
         AppointmentResponseDTO response = appointmentService.advanceToTriaged(id);
         return ResponseEntity.ok(response);
     }
 
     @PatchMapping("/{id}/consult")
-    public ResponseEntity<AppointmentResponseDTO> advanceToInConsultation(@PathVariable Long id) {
+    public ResponseEntity<AppointmentResponseDTO> advanceToInConsultation(
+            @PathVariable("id") Long id) {
+
         AppointmentResponseDTO response = appointmentService.advanceToInConsultation(id);
         return ResponseEntity.ok(response);
     }
 
     @PatchMapping("/{id}/discharge")
-    public ResponseEntity<AppointmentResponseDTO> discharge(@PathVariable Long id) {
+    public ResponseEntity<AppointmentResponseDTO> discharge(
+            @PathVariable("id") Long id) {
+
         AppointmentResponseDTO response = appointmentService.discharge(id);
         return ResponseEntity.ok(response);
     }
 
     @PatchMapping("/{id}/cancel")
-    public ResponseEntity<AppointmentResponseDTO> cancel(@PathVariable Long id) {
+    public ResponseEntity<AppointmentResponseDTO> cancel(
+            @PathVariable("id") Long id) {
+
         AppointmentResponseDTO response = appointmentService.cancel(id);
         return ResponseEntity.ok(response);
     }
