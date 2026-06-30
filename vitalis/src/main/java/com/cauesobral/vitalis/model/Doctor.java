@@ -13,7 +13,8 @@ public class Doctor extends Person {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private final String crm; // Credencial do médico
+    private String crm; // Credencial do médico, nao posso usar final
+    //pq se nao o jpa nao funciona o update
 
     @Enumerated(EnumType.STRING)
     private Specialty specialty;

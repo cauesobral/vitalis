@@ -2,7 +2,7 @@ package com.cauesobral.vitalis.controller;
 
 import com.cauesobral.vitalis.dto.AppointmentRequestDTO;
 import com.cauesobral.vitalis.dto.AppointmentResponseDTO;
-import com.cauesobral.vitalis.service.impl.AppointmentService;
+import com.cauesobral.vitalis.service.AppointmentService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

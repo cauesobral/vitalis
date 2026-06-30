@@ -1,19 +1,11 @@
-package com.cauesobral.vitalis.model;
+package com.cauesobral.vitalis.dto;
 
-import jakarta.persistence.*;
-import java.util.Objects;
+import com.cauesobral.vitalis.model.Priority;
 
-@Entity
-@Table(name = "triages")
-public class Triage {
+public class TriageResponseDTO {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @OneToOne
-    @JoinColumn(name = "appointment_id")
-    private Appointment appointment;
+    private Long appointmentId;
 
     private String symptoms;
 
@@ -25,17 +17,15 @@ public class Triage {
     private Double weight;
     private Double height;
 
-    @Enumerated(EnumType.STRING)
     private Priority priority;
 
     private String notes;
 
-    public Triage() {}
-
     public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public Appointment getAppointment() { return appointment; }
-    public void setAppointment(Appointment appointment) { this.appointment = appointment; }
+    public Long getAppointmentId() { return appointmentId; }
+    public void setAppointmentId(Long appointmentId) { this.appointmentId = appointmentId; }
 
     public String getSymptoms() { return symptoms; }
     public void setSymptoms(String symptoms) { this.symptoms = symptoms; }
@@ -66,17 +56,4 @@ public class Triage {
 
     public String getNotes() { return notes; }
     public void setNotes(String notes) { this.notes = notes; }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Triage)) return false;
-        Triage that = (Triage) o;
-        return Objects.equals(id, that.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
 }

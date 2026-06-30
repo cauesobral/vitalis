@@ -1,4 +1,4 @@
-package com.cauesobral.vitalis.service.impl;
+package com.cauesobral.vitalis.service;
 
 import com.cauesobral.vitalis.dto.AppointmentRequestDTO;
 import com.cauesobral.vitalis.dto.AppointmentResponseDTO;
